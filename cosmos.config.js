@@ -1,18 +1,18 @@
 export default [
   {
-    chainId: 'cerberus-1',
-    name: 'Cerberus (testnet)',
-    desc: 'Cerberus the first ever three-headed meme-coin in the Cosmos ecosystem',
-    apiURL: 'https://api.test.cerberus.zone:1317',
-    rpcURL: 'https://rpc.test.cerberus.zone:26657',
+    chainId: "cerberus-1",
+    name: "Cerberus",
+    desc: "Cerberus the first ever three-headed meme-coin in the Cosmos ecosystem",
+    apiURL: "https://api.cerberus.zone:1317",
+    rpcURL: "https://rpc.cerberus.zone:26657",
     coinLookup: {
-      viewDenom: 'CRBRUS',
-      chainDenom: 'ucrbrus',
-      addressPrefix: 'cerberus',
-      icon: 'https://cerberus-chain.s3.us-east-2.amazonaws.com/transparent_logo_no_text.png',
+      viewDenom: "CRBRUS",
+      chainDenom: "ucrbrus",
+      addressPrefix: "cerberus",
+      icon: "https://cerberus-chain.s3.us-east-2.amazonaws.com/transparent_logo_no_text.png",
     },
-    coingeckoId: ''
-  }
+    coingeckoId: "",
+  },
   /*  {
     chainId: 'chihuahua-1',
     name: 'Chihuahua',
@@ -27,4 +27,4 @@ export default [
     },
     coingeckoId: 'chihuahua-token'
   },*/
-]
+];
