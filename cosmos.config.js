@@ -13,18 +13,4 @@ export default [
     },
     coingeckoId: "",
   },
-  /*  {
-    chainId: 'chihuahua-1',
-    name: 'Chihuahua',
-    desc: 'Chihuahua is the first interoperable meme coin with a POS blockchain, making it one of the most utilized chains in the Cosmos ecosystem',
-    apiURL: 'https://api.chihuahua.wtf',
-    rpcURL: 'https://rpc.chihuahua.wtf',
-    coinLookup: {
-      viewDenom: 'HUAHUA',
-      chainDenom: 'uhuahua',
-      addressPrefix: 'chihuahua',
-      icon: `https://avatars.githubusercontent.com/u/94940349?v=4`,
-    },
-    coingeckoId: 'chihuahua-token'
-  },*/
 ];
