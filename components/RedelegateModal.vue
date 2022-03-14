@@ -17,6 +17,8 @@
       <v-card>
         <v-card-title>
           <span class="text-h5">Redelegate from {{ validatorName }}</span>
+          <v-spacer></v-spacer>
+          <v-icon class="mr-2" @click="dialog = false">mdi-close-circle</v-icon>          
         </v-card-title>
         <v-card-text>
         <v-form
@@ -101,12 +103,6 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="darken-1"
-            @click="dialog = false"
-          >
-            Close
-          </v-btn>
           <v-btn
             :disabled="!dislableSend"
             :loading="loading"

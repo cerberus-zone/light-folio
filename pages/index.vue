@@ -228,61 +228,6 @@
             </v-card-text>
             </v-card>
           </v-col>           
-<!--          <v-col
-            cols="12"
-            md="3"
-          > 
-            <v-card
-              class="pa-2"
-              outlined
-              rounded="lg"
-            >          
-            <v-card-title>Redelegations</v-card-title>
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead>
-                    <tr v-if="logged && delegationsLoaded">
-                      <th class="text-left">
-                        Name
-                      </th>
-                      <th class="text-left">
-                        Reward
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr
-                      v-if="logged"
-                      v-for="item in reDelegations"
-                      :key="item.validator_dst_address"
-                    >
-                     
-                      <td>
-                      <v-avatar
-
-                        class="mr-3"
-                        color="grey darken-1"
-                        size="32"
-                      >
-                        <img
-                          :src="cosmosConfig[0].coinLookup.icon"
-                          alt="cerberus"
-                        >
-                      </v-avatar>
-                      {{ item.validator_src_address }}
-                      </td>
-                      <td>
-                        {{ item.entries[0].redelegation_entry.initial_balance }}
-                        
-                        </td>
- 
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card>
-          </v-col>-->
           <v-col
             cols="12"
             md="6"
@@ -292,7 +237,7 @@
               outlined
               rounded="lg"
             >          
-            <v-card-title>Others</v-card-title>
+            <v-card-title>Other</v-card-title>
             <v-card-text>
               <v-tabs v-model="tab" v-if="logged">
                 <v-tab href="#tab-1">
@@ -432,7 +377,7 @@
             <v-data-table
               :headers="headers"
               :items="validators"
-              :items-per-page="5"
+              :items-per-page="50"
               class="elevation-1"
             >
               <template #item.name="{ item }">
@@ -451,69 +396,15 @@
               </template>            
               <template #item.delegate="{ item }">
                   <DelegateModal
-                    v-if="logged"
+                    v-if="logged && balancesLoaded"
                     :chainIdProps="cosmosConfig[0].coinLookup.addressPrefix"
                     :addressTo="item.op_address"
                     :validatorName="item.name"
                     :balances="balances"
+                    :coinIcon="cosmosConfig[0].coinLookup.icon"
                   />
               </template>  
             </v-data-table>
-  
-           <!-- <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">
-                      Name
-                    </th>
-                    <th class="text-left">
-                      Operator address
-                    </th>
-                    <th class="text-left">
-                      Delegate
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-if="validatorsLoaded"
-                    v-for="item in validators"
-                    :key="item.name"
-                  >
-                    <td>
-                    <v-avatar
-
-                      class="mr-3"
-                      color="grey darken-1"
-                      size="32"
-                    >
-                      <img
-                        :src="cosmosConfig[0].coinLookup.icon"
-                        alt="cerberus"
-                      >
-                    </v-avatar>
-                    {{ item.name }}
-                    </td>
-                    <td>{{ item.op_address }}</td>
-                    <td>
-
-                  <template >
-                  <DelegateModal
-                    v-if="logged"
-                    :chainIdProps="cosmosConfig[0].coinLookup.addressPrefix"
-                    :addressTo="item.op_address"
-                    :validatorName="item.name"
-                    :balances="balances"
-                  />
-
-                  </template>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>-->
- 
           </v-col>
         </v-row>
       </v-container>
@@ -531,7 +422,7 @@
         class="white py-4 text-center black--text"
         cols="12"
       >
-        cerberus.zone — {{ new Date().getFullYear() }} - v1.1.0
+        cerberus.zone — {{ new Date().getFullYear() }} - v1.1.1
       </v-col>
     </v-row>
   </v-footer>
@@ -572,7 +463,7 @@ import {
     }),
     computed: {
       ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-      ...mapState('data', [`balances`, 'validators', 'delegations', 'delegationsLoaded', 'validatorsLoaded', 'rewards', 'reDelegations', 'unbondings', 'lastBlock']),
+      ...mapState('data', [`balances`, 'validators', 'delegations', 'delegationsLoaded', 'validatorsLoaded', 'rewards', 'reDelegations', 'unbondings', 'lastBlock', 'balancesLoaded']),
     },
     async mounted() {
       this.interval = setInterval(async () => {

@@ -85,6 +85,7 @@ export const actions = {
       var amount = Number(foundAccountInfo.amount)
 
     commit('setBalances', amount)
+    commit('setBalancesLoaded', true)    
     return accountInfo
   },
 
