@@ -17,6 +17,8 @@
       <v-card>
         <v-card-title>
           <span class="text-h5">Delegate to {{ validatorName }}</span>
+          <v-spacer></v-spacer>
+          <v-icon class="mr-2" @click="dialog = false">mdi-close-circle</v-icon>          
         </v-card-title>
         <v-card-text>
         <v-form
@@ -52,7 +54,17 @@
                   :rules="amountRules"
                   required
                   outlined
-                ></v-text-field>
+                >
+                  <template v-slot:append> 
+                    <img
+                      width="24"
+                      height="24"
+                      :srcset='coinIcon'
+                      alt=""
+                      :class="`rounded-xl`"
+                    > 
+                  </template>                 
+                </v-text-field>
 
               </v-col>
               <v-col cols="12">
@@ -85,18 +97,12 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            color="darken-1"
-            @click="dialog = false"
-          >
-            Close
-          </v-btn>
-          <v-btn
             :disabled="!dislableSend"
             :loading="loading"
             color="darken-1"
             @click="validate"
           >
-            Send Tx
+            Delegate
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -133,7 +139,7 @@ import {
     }
   }
   export default {
-    props: ['chainIdProps', 'addressTo', 'validatorName', 'balances', 'chainName'],
+    props: ['chainIdProps', 'addressTo', 'validatorName', 'balances', 'chainName', 'coinIcon'],
     data: (instance) => ({
       dialog: false,
       dislableSend: true,
