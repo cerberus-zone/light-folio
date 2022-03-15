@@ -373,38 +373,57 @@
             cols="12"
             md="12"
           >
- 
-            <v-data-table
-              :headers="headers"
-              :items="validators"
-              :items-per-page="50"
-              class="elevation-1"
-            >
-              <template #item.name="{ item }">
-                    <v-avatar
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Name
+                    </th>
+                    <th class="text-left">
+                      Commission
+                    </th>
+                    <th class="text-left">
+                      Operator address
+                    </th>
+                    <th class="text-left">
+                      Delegate
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="item in validators"
+                    :key="item.op_address"
+                  >
+                    <td>
+                      <v-avatar
 
-                      class="mr-3"
-                      color="grey darken-1"
-                      size="32"
-                    >
-                      <img
-                        :src="cosmosConfig[0].coinLookup.icon"
-                        alt="cerberus"
+                        class="mr-3"
+                        color="grey darken-1"
+                        size="32"
                       >
-                    </v-avatar>              
-                  {{ item.name }}
-              </template>            
-              <template #item.delegate="{ item }">
-                  <DelegateModal
-                    v-if="logged && balancesLoaded"
-                    :chainIdProps="cosmosConfig[0].coinLookup.addressPrefix"
-                    :addressTo="item.op_address"
-                    :validatorName="item.name"
-                    :balances="balances"
-                    :coinIcon="cosmosConfig[0].coinLookup.icon"
-                  />
-              </template>  
-            </v-data-table>
+                        <img
+                          :src="cosmosConfig[0].coinLookup.icon"
+                          alt="cerberus"
+                        >
+                      </v-avatar>              
+                    {{ item.name }}                    
+                    </td>
+                    <td>{{ item.crate }}</td>
+                    <td>{{ item.op_address }}</td>
+                    <td><DelegateModal
+                      v-if="logged && balancesLoaded"
+                      :chainIdProps="cosmosConfig[0].coinLookup.addressPrefix"
+                      :addressTo="item.op_address"
+                      :validatorName="item.name"
+                      :balances="balances"
+                      :coinIcon="cosmosConfig[0].coinLookup.icon"
+                    /></td>                   
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table> 
           </v-col>
         </v-row>
       </v-container>
@@ -422,7 +441,7 @@
         class="white py-4 text-center black--text"
         cols="12"
       >
-        cerberus.zone — {{ new Date().getFullYear() }} - v1.1.1
+        cerberus.zone — {{ new Date().getFullYear() }} - v1.1.2
       </v-col>
     </v-row>
   </v-footer>
@@ -439,13 +458,7 @@ import {
 
   export default {
     data: () => ({
-      tab: null,
-        headers: [
-          { text: 'Name', value: 'name' },
-          { text: 'Commission', value: 'crate' },
-          { text: 'Operator address', value: 'op_address' },
-          { text: 'Delegate', value: 'delegate' },
-        ],      
+      tab: null,   
       links: [
         {
           name: 'Dashboard',
