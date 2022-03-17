@@ -11,7 +11,7 @@ module.exports = {
             chainName: dataChain.name,
             rpc: dataChain.rpcURL,
             rest: dataChain.apiURL,
-            walletUrlForStaking: "https://wallet.cerberus.zone/",
+            walletUrlForStaking: "https://stake.cerberus.zone/",
             stakeCurrency: {
               coinDenom: dataChain.coinLookup.viewDenom,
               coinMinimalDenom: dataChain.coinLookup.chainDenom,
