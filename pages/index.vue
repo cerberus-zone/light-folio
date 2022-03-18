@@ -527,7 +527,6 @@ import {
       window.addEventListener("keplr_keystorechange", async () => {
         await this.$store.dispatch('keplr/connectWallet', cosmosConfig[0])
         //this.$store.dispatch('data/getAccountInfo', account[0].address)
-        console.log(this.accounts[0].address)
         this.$store.dispatch('data/refresh', this.accounts[0].address)
       })
     },
