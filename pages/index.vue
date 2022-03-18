@@ -92,10 +92,8 @@
                 />            
             <v-spacer></v-spacer>
 
-            <div v-if="logged">
-              
-              {{ (balances / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}
-              
+            <div v-if="logged">              
+              {{ (balances / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}              
             </div>
             <div v-else>0 {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             </v-card-title>
@@ -149,7 +147,15 @@
               outlined
               rounded="lg"
             >
-            <v-card-title>My delegations</v-card-title>
+            <v-card-title>My delegations 
+            <v-spacer></v-spacer>         
+            <ClaimAllModal 
+              v-if="logged"
+              :chainIdProps="cosmosConfig[0].coinLookup.addressPrefix" 
+              :amountClaimAll="(rewards.amount / 1000000).toFixed(6)"
+              :getAllDelegation="delegations"
+            />
+            </v-card-title>
             <v-card-text>
               <v-simple-table>
                 <template v-slot:default>
@@ -157,6 +163,9 @@
                     <tr v-if="logged && delegationsLoaded">
                       <th class="text-left">
                         Name
+                      </th>
+                      <th class="text-left">
+                        Delegate
                       </th>
                       <th class="text-left">
                         Reward
@@ -171,6 +180,7 @@
                   </thead>
 
                   <tbody>
+                  
                     <tr
                       v-if="logged && delegationsLoaded"
                       v-for="item in delegations"
@@ -190,6 +200,7 @@
                       </v-avatar>
                       {{ item.validatorName }}
                       </td>
+                      <td>{{ (item.share / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                       <td>
 
                         <div v-if="!isNaN(item.reward)">
@@ -368,6 +379,21 @@
           </v-col>
        </v-row>
         <!-- Here -->
+        <!--<v-row>
+          <v-col
+            cols="12"
+            md="12"
+          >
+            <v-card
+              class="pa-2"
+              outlined
+              rounded="lg"
+            >
+            
+            test
+            </v-card>
+          </v-col> 
+        </v-row> -->       
         <v-row>
           <v-col
             cols="12"
@@ -381,6 +407,9 @@
                       Name
                     </th>
                     <th class="text-left">
+                      Voting power
+                    </th>
+                    <th class="text-left">
                       Commission
                     </th>
                     <th class="text-left">
@@ -392,6 +421,7 @@
                   </tr>
                 </thead>
                 <tbody>
+ 
                   <tr
                     v-for="item in validators"
                     :key="item.op_address"
@@ -410,6 +440,7 @@
                       </v-avatar>              
                     {{ item.name }}                    
                     </td>
+                    <td>{{ (item.tokens / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                     <td>{{ item.crate }}</td>
                     <td>{{ item.op_address }}</td>
                     <td><DelegateModal
@@ -490,10 +521,9 @@ import {
         this.timerValue += 10
       }, 1000)
       
-      await this.$store.dispatch('data/getLastBlock')
- 
-      
+      await this.$store.dispatch('data/getLastBlock')      
       await this.$store.dispatch('data/getAllValidators')
+      
       window.addEventListener("keplr_keystorechange", async () => {
         await this.$store.dispatch('keplr/connectWallet', cosmosConfig[0])
         //this.$store.dispatch('data/getAccountInfo', account[0].address)

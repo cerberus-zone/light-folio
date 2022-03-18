@@ -199,15 +199,19 @@ export const actions = {
       } else {
         validatorAvatar = validatorAvatar.them[0].pictures.primary.url
       } */
-
+      // console.log(item)
       copieValidators.push({
         name: item.description.moniker,
         op_address: item.operator_address,
         crate: (Number(item.commission.commission_rates.rate) * 100).toFixed(2) + ' %',
         website: item.description.website,
+        tokens: item.tokens,
         // avatar: validatorAvatar
       });
     }));
+    copieValidators.sort(function(a, b) {
+      return b.tokens - a.tokens
+    })  
 
     commit('setValidators', copieValidators)
     commit('setValidatorsLoaded', true)
