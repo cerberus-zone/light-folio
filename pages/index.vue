@@ -28,17 +28,17 @@
         </v-btn>
 
         <v-spacer></v-spacer>
-    <v-progress-circular
-      v-if="logged"
-      :rotate="360"
-      :size="20"
-      :width="5"
-      :value="timerValue"
-      color="amber"
-      class="mr-4"
-    >
- 
-    </v-progress-circular>        
+          <v-progress-circular
+            v-if="logged"
+            :rotate="360"
+            :size="20"
+            :width="5"
+            :value="timerValue"
+            color="amber"
+            class="mr-4"
+          >
+      
+          </v-progress-circular>        
           <v-btn v-if="!logged" elevation="4" depressed v-on:click="connectKeplr">
           <img
             class="mr-2"
@@ -404,6 +404,9 @@
                 <thead>
                   <tr>
                     <th class="text-left">
+                      Rank
+                    </th>
+                    <th class="text-left">
                       Name
                     </th>
                     <th class="text-left">
@@ -420,12 +423,18 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody>
- 
+                <tbody> 
                   <tr
-                    v-for="item in validators"
+                    v-for="(item, index) in validators"
                     :key="item.op_address"
                   >
+                    <td>                    
+                      <v-chip
+                        class="ma-2"
+                      >
+                        {{ (index + 1) }}
+                      </v-chip>
+                    </td>
                     <td>
                       <v-avatar
 
