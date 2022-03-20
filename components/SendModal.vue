@@ -12,6 +12,7 @@
           x-small
           plain
           class="ma-2"
+          color="yellow"
         >
           <v-icon>mdi-send</v-icon>
         </v-btn>
