@@ -1,11 +1,11 @@
 <template>
-  <v-app id="inspire">
+  <v-app :style="{background: $vuetify.theme.themes[theme].background}">
+ 
     <v-app-bar
       app
-      color="white"
       flat
     >
-      <v-container class="py-0 fill-height">
+      <v-container fluid class="py-0 fill-height">
         <v-avatar
 
           class="mr-10"
@@ -26,8 +26,7 @@
         >
           {{ link.name }}
         </v-btn>
-
-        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>        
           <v-progress-circular
             v-if="logged"
             :rotate="360"
@@ -67,10 +66,13 @@
             <v-icon>mdi-logout</v-icon>
           </v-btn>
         </div>
+      <v-toolbar-items>
+        <ThemeChangerMenu />
+      </v-toolbar-items>
       </v-container>
     </v-app-bar>
 
-    <v-main class="grey lighten-3">
+    <v-main>
       <v-container>
 
         <v-row>
@@ -469,7 +471,6 @@
       </v-container>
     </v-main>
   <v-footer
-    color="white"
     padless
   >
     <v-row
@@ -478,10 +479,10 @@
     >
 
       <v-col
-        class="white py-4 text-center black--text"
+        class="py-4 text-center"
         cols="12"
-      >
-        cerberus.zone — {{ new Date().getFullYear() }} - v1.1.2
+      > 
+        cerberus.zone - {{ new Date().getFullYear() }} - v1.1.4     
       </v-col>
     </v-row>
   </v-footer>
@@ -517,6 +518,9 @@ import {
     computed: {
       ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
       ...mapState('data', [`balances`, 'validators', 'delegations', 'delegationsLoaded', 'validatorsLoaded', 'rewards', 'reDelegations', 'unbondings', 'lastBlock', 'balancesLoaded']),
+      theme(){
+        return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+      }      
     },
     async mounted() {
       this.interval = setInterval(async () => {

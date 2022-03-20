@@ -67,13 +67,24 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
+          background: "#121212",
         },
+        light: {
+          primary: colors.blue.darken2,
+          accent: "#ff6b99",
+          secondary: colors.grey.darken1,
+          success: "#a5d64c",
+          info: "#ff53d0",
+          warning: "#ff8e00",
+          error: "#ff5252",
+          background: "#eeeeee",
+        },        
       },
     },
   },
   server: {
     port: 8085, // default: 3000
-    host: "stake.cerberus.zone", // default: localhost,
+    //host: "stake.cerberus.zone", // default: localhost,
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
