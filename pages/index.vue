@@ -129,7 +129,7 @@
             <div v-if="logged && priceLoaded && delegationsLoaded && delegations.length > 0 && !isNaN(rewards.amount)">{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             <div v-else>0 {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             </v-card-title>
-            <v-card-text v-if="logged">              
+            <v-card-text v-if="logged && priceLoaded && delegationsLoaded">              
               <div class="text-right"> 
                 <a href="https://www.coingecko.com/en/coins/cerberus" target="_blank">
                   <v-img
