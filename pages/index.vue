@@ -95,11 +95,23 @@
             <v-spacer></v-spacer>
 
             <div v-if="logged">              
-              {{ (balances / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}              
+              {{ (balances / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}    
+              
             </div>
             <div v-else>0 {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             </v-card-title>
-
+            <v-card-text v-if="logged">              
+              <div class="text-right"> 
+                <a href="https://www.coingecko.com/en/coins/cerberus" target="_blank">
+                  <v-img
+                    max-height="15"
+                    max-width="15"
+                    src="https://static.coingecko.com/s/thumbnail-007177f3eca19695592f0b8b0eabbdae282b54154e1be912285c9034ea6cbaf2.png"
+                  ></v-img>     
+                </a>
+                <b>Wallet value: ${{ ((balances / 1000000) * price).toFixed(2) }} </b>
+              </div> 
+            </v-card-text>
             </v-card>
           </v-col>
           <v-col
@@ -114,7 +126,7 @@
             <v-card-title>My reward
             <v-spacer></v-spacer>
  
-            <div v-if="logged && delegationsLoaded && delegations.length > 0 && !isNaN(rewards.amount)">{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
+            <div v-if="logged && priceLoaded && delegationsLoaded && delegations.length > 0 && !isNaN(rewards.amount)">{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             <div v-else>0 {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             </v-card-title>
 
@@ -445,7 +457,7 @@
                         size="32"
                       >
                         <img
-                          :src="cosmosConfig[0].coinLookup.icon"
+                          :src="item.avatar"
                           alt="cerberus"
                         >
                       </v-avatar>              
@@ -517,7 +529,7 @@ import {
     }),
     computed: {
       ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-      ...mapState('data', [`balances`, 'validators', 'delegations', 'delegationsLoaded', 'validatorsLoaded', 'rewards', 'reDelegations', 'unbondings', 'lastBlock', 'balancesLoaded']),
+      ...mapState('data', [`balances`, 'validators', 'delegations', 'delegationsLoaded', 'validatorsLoaded', 'rewards', 'reDelegations', 'unbondings', 'lastBlock', 'balancesLoaded','priceLoaded', 'price']),
       theme(){
         return (this.$vuetify.theme.dark) ? 'dark' : 'light'
       }      
@@ -540,11 +552,13 @@ import {
       window.addEventListener("keplr_keystorechange", async () => {
         await this.$store.dispatch('keplr/connectWallet', cosmosConfig[0])
         //this.$store.dispatch('data/getAccountInfo', account[0].address)
+        this.$store.dispatch('data/resetSessionData')
         this.$store.dispatch('data/refresh', this.accounts[0].address)
       })
     },
     methods: {
       connectKeplr: async function (event) {
+        await this.$store.dispatch('data/resetSessionData')
         await this.$store.dispatch('keplr/connectWallet', cosmosConfig[0])
         await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
         await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
@@ -552,6 +566,7 @@ import {
         await this.$store.dispatch('data/getReDelegations', this.accounts[0].address)
         await this.$store.dispatch('data/getUnbondings', this.accounts[0].address)
         await this.$store.dispatch('data/getLastBlock')
+        await this.$store.dispatch('data/getPrice')
         //await this.$store.dispatch('data/refresh', this.accounts[0].address)
 
         // this.address = this.accounts
@@ -597,6 +612,8 @@ import {
       logoutNow() {
 
         this.$store.dispatch('keplr/logout')
+        this.$store.dispatch('data/resetSessionData')
+        
 
         // this.$router.push({path: "login"})
       },
@@ -607,4 +624,8 @@ import {
 .v-progress-circular {
   margin: 1rem;
 }
+.text-right .v-image {
+  display: inline-block;
+}
+
 </style>

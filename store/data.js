@@ -6,6 +6,8 @@ export const state = () => ({
   lastBlock: '',
   block: undefined,
   chainId: 0,
+  price: 0,
+  priceLoaded: false,
   balances: [],
   balancesLoaded: false,
   rewards: [],
@@ -64,8 +66,7 @@ export const actions = {
       dispatch('getAllProposals'),
       dispatch('getReDelegations', address),
       dispatch('getLastBlock'),
-      
-
+      dispatch('getPrice'),  
     ]
     await Promise.all(calls)
   },
@@ -73,6 +74,13 @@ export const actions = {
   async getLastBlock({ commit, state }) {
     const lastBlock = await axios(cosmosConfig[state.chainId].apiURL + `/blocks/latest`)
     commit('setLastBlock', lastBlock.data.block.header.height)
+  },  
+
+  async getPrice({ commit, state }) {
+    const chainPrice = await axios('https://api.coingecko.com/api/v3/simple/price?ids=' + cosmosConfig[0].coingeckoId + '&vs_currencies=usd')
+    // console.log(chainPrice.data[cosmosConfig[0].coingeckoId].usd)
+    commit('setPrice', chainPrice.data[cosmosConfig[0].coingeckoId].usd)
+    commit('setPriceLoaded', true)    
   },  
   
   async getWalletInfo({ commit, state }, address) {
@@ -190,25 +198,25 @@ export const actions = {
     // await allValidators.data.result.forEach(function(item){
     await Promise.all(allValidators.data.result.map(async (item) => {
 
-      /*var validatorAvatar = await fetch(
-        'https://keybase.io/_/api/1.0/user/lookup.json?fields=pictures&key_suffix=' + item.description.identity
-        ).then(res => res.json())
-        //console.log(validatorAvatar)
-      if (!validatorAvatar.them) {
-        validatorAvatar = cosmosConfig[state.chainId].coinLookup.icon
-      } else {
-        validatorAvatar = validatorAvatar.them[0].pictures.primary.url
-      } */
-      // console.log(item)
+      let apiRes = null;
+      let finalAvatar = cosmosConfig[0].monikerResources + '/' + item.operator_address + '.png'
+      try {
+        await axios.get(finalAvatar);
+        apiRes = finalAvatar
+      } catch (err) {
+        apiRes = cosmosConfig[0].coinLookup.icon;
+      }     
+        
       copieValidators.push({
         name: item.description.moniker,
         op_address: item.operator_address,
         crate: (Number(item.commission.commission_rates.rate) * 100).toFixed(2) + ' %',
         website: item.description.website,
         tokens: item.tokens,
-        // avatar: validatorAvatar
-      });
-    }));
+        avatar: apiRes
+      })
+    }))
+    
     copieValidators.sort(function(a, b) {
       return b.tokens - a.tokens
     })  
