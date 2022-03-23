@@ -78,13 +78,14 @@ export default {
           warning: "#ff8e00",
           error: "#ff5252",
           background: "#eeeeee",
-        },        
+        },
       },
     },
   },
   server: {
     port: 8085, // default: 3000
     host: "stake.cerberus.zone", // default: localhost,
+    // host: "localhost",
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
