@@ -129,7 +129,18 @@
             <div v-if="logged && priceLoaded && delegationsLoaded && delegations.length > 0 && !isNaN(rewards.amount)">{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             <div v-else>0 {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             </v-card-title>
-
+            <v-card-text v-if="logged">              
+              <div class="text-right"> 
+                <a href="https://www.coingecko.com/en/coins/cerberus" target="_blank">
+                  <v-img
+                    max-height="15"
+                    max-width="15"
+                    src="https://static.coingecko.com/s/thumbnail-007177f3eca19695592f0b8b0eabbdae282b54154e1be912285c9034ea6cbaf2.png"
+                  ></v-img>     
+                </a>
+                <b>Rewards value: ${{ ((rewards.amount / 1000000) * price).toFixed(2) }} </b>
+              </div> 
+            </v-card-text>
 
             </v-card>
           </v-col>
