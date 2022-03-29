@@ -16,6 +16,7 @@ module.exports = {
               coinDenom: dataChain.coinLookup.viewDenom,
               coinMinimalDenom: dataChain.coinLookup.chainDenom,
               coinDecimals: 6,
+              coinGeckoId: "cerberus-2",
             },
             bip44: {
               coinType: 118,
@@ -33,6 +34,7 @@ module.exports = {
                 coinDenom: dataChain.coinLookup.viewDenom,
                 coinMinimalDenom: dataChain.coinLookup.chainDenom,
                 coinDecimals: 6,
+                coinGeckoId: "cerberus-2",
               },
             ],
             feeCurrencies: [
@@ -40,6 +42,7 @@ module.exports = {
                 coinDenom: dataChain.coinLookup.viewDenom,
                 coinMinimalDenom: dataChain.coinLookup.chainDenom,
                 coinDecimals: 6,
+                coinGeckoId: "cerberus-2",
               },
             ],
             coinType: 118,

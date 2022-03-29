@@ -12,6 +12,7 @@ export default [
       icon: "https://cerberus-chain.s3.us-east-2.amazonaws.com/transparent_logo_no_text.png",
     },
     coingeckoId: "cerberus-2",
-    monikerResources : 'https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/moniker/cerberus',
+    monikerResources:
+      "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/moniker/cerberus",
   },
 ];
