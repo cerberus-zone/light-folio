@@ -148,6 +148,7 @@ export const actions = {
 
     commit('setDelegations', copieRewards)
     commit('setRewards', foundMainDenom)
+    commit('setRewardsLoaded', true)
     commit('setDelegationsLoaded', true)
   },
   
