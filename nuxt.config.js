@@ -84,7 +84,7 @@ export default {
   },
   server: {
     port: 8085, // default: 3000
-    // host: "stake.cerberus.zone", // default: localhost,
+    host: "stake.cerberus.zone", // default: localhost,
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
