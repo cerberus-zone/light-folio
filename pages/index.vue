@@ -1,5 +1,23 @@
 <template>
+
     <v-main>
+    <v-parallax height="300" src="https://www.mintscan.io/_next/static/media/bg_cerberus.7ff0969f27e0fe96d9517da3f9c1c03f.png">
+    <v-row
+      align="center"
+      justify="center"
+    >
+      <v-col
+        class="text-center"
+        cols="12"
+      >
+        <h1 class="text-h4 font-weight-thin mb-4">
+          Cerberus Webwallet
+        </h1>
+ 
+      </v-col>
+    </v-row>    
+    </v-parallax>
+    <br />
       <v-container>
         <v-row>
           <v-col

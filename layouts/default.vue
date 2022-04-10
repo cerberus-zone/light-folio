@@ -1,4 +1,5 @@
 <template>
+  
   <v-app :style="{background: $vuetify.theme.themes[theme].background}">
  
     <v-app-bar
