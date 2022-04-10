@@ -453,9 +453,7 @@ import {
     },
     async fetch() {
       const getAprPool662 = await axios('https://api-osmosis.imperator.co/apr/v2/662')  
-      console.log(getAprPool662.data[0].apr_list[0].apr_14d)
-      this.aprPool662 = getAprPool662.data[0].apr_list[0].apr_14d.toFixed(2)
-       
+      this.aprPool662 = getAprPool662.data[0].apr_list[0].apr_14d.toFixed(2)       
     },    
     async mounted() {
       // this.$vuetify.theme.themes[(this.$vuetify.theme.dark) ? 'dark' : 'light'].background
