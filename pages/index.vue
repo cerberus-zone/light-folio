@@ -57,8 +57,16 @@
                 </template>
               </v-simple-table>  
             </v-card-text>
-            <v-card-text v-else class="justify-center">              
-              Please login
+            <v-card-text v-else class="text-center">              
+              <v-btn v-if="!logged" elevation="4" depressed v-on:click="connectKeplr">
+              <img
+                class="mr-2"
+                src="/keplr.png"
+                width="20"
+                height="20"
+              >
+                Connect keplr
+              </v-btn>
             </v-card-text>            
             </v-card>
           </v-col>
@@ -107,7 +115,17 @@
               </v-simple-table>
               
             </v-card-text>
-
+            <v-card-text v-else class="text-center">              
+              <v-btn v-if="!logged" elevation="4" depressed v-on:click="connectKeplr">
+              <img
+                class="mr-2"
+                src="/keplr.png"
+                width="20"
+                height="20"
+              >
+                Connect keplr
+              </v-btn>
+            </v-card-text> 
             </v-card>
           </v-col>
           <v-col
@@ -471,6 +489,23 @@ import {
       })
     },
     methods: {
+      connectKeplr: async function (event) {
+        await this.$store.dispatch('data/resetSessionData')
+        await this.$store.dispatch('keplr/connectWallet', cosmosConfig[0])
+        await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
+        await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+        await this.$store.dispatch('data/getAllProposals')
+        await this.$store.dispatch('data/getReDelegations', this.accounts[0].address)
+        await this.$store.dispatch('data/getUnbondings', this.accounts[0].address)
+        await this.$store.dispatch('data/getLastBlock')
+        await this.$store.dispatch('data/getPrice')
+        
+        
+        //await this.$store.dispatch('data/refresh', this.accounts[0].address)
+
+        // this.address = this.accounts
+        // this.$router.push({path: "/"})
+      },    
       getReward(addrValidator) {
         (async () => {
             const chainId = cosmosConfig[0].chainId;

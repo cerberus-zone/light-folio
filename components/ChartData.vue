@@ -49,24 +49,36 @@ export default {
           candlestick: {
             fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
             risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+          },
+          explorer: {
+            axis: 'horizontal',
+            keepInBounds: false,
+            maxZoomIn: 8.0
+          },
+          tooltip: {
+            trigger: 'none'
           }          
       }
     }
   },
   async fetch() {
-    const getMagetData = await axios('https://api.coingecko.com/api/v3/coins/cerberus-2/ohlc?vs_currency=usd&days=1')  
+  
+    // const getMagetData = await axios('https://api.coingecko.com/api/v3/coins/cerberus-2/ohlc?vs_currency=usd&days=1')  
+    const getMagetData = await axios('https://api-osmosis.imperator.co/tokens/v2/historical/CRBRUS/chart?tf=15') 
     var priceChartData = this.priceChartData
       getMagetData.data.forEach(function(item){
-      var date = new Date(item[0]);
+      console.log(item) 
+      var date = new Date(item.time);
       //console.log(date.getTime())          
       priceChartData.push([
         date, // the date
-        item[3], // low
-        item[1], // open
-        item[4], // close
-        item[2] // high
+        item.low, // low
+        item.open, // open
+        item.close, // close
+        item.high // high
       ]);
-    });        
+    }); 
+    console.log(this.priceChartData) 
   },  
 };
 </script> 
