@@ -92,7 +92,7 @@ export default {
           warning: "#ff8e00",
           error: "#ff5252",
           background: "#eeeeee",
-        },        
+        },
       },
     },
   },
