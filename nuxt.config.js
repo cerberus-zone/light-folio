@@ -1,16 +1,12 @@
 import colors from "vuetify/es5/util/colors";
 
 export default {
-  // Build the app as a static site instead of Server Side Rendered (SSR)
-  // (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-mode/)
   ssr: false,
   target: "server",
 
-  // Use local 404 instead of redirecting to Netlify 404 (https://go.nuxtjs.dev/config-build)
   generate: {
     fallback: true,
   },
-  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: "Cerberus Zone Wallet",
     title: "Cerberus Zone Wallet",
@@ -26,20 +22,15 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['~/plugins/v-chart.js'],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
+
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // https://go.nuxtjs.dev/vuetify
-    "@nuxtjs/vuetify",
-  ],
+  buildModules: ["@nuxtjs/vuetify"],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -60,14 +51,10 @@ export default {
       },
     ],    
   ],
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: "/",
   },
 
-  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ["~/assets/variables.scss"],
     theme: {
@@ -97,10 +84,8 @@ export default {
     },
   },
   server: {
-    port: 8085, // default: 3000
-    host: "stake.cerberus.zone", // default: localhost,
-    // host: "localhost",
+    port: 8085,
+    host: "stake.cerberus.zone",
   },
-  // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 };
