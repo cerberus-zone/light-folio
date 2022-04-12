@@ -36,6 +36,8 @@ export default {
    menu:false
   }),
   methods: {
-  }
+ 
+  },
+  
 };
 </script> 

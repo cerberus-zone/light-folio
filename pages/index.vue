@@ -1,80 +1,24 @@
 <template>
-  <v-app :style="{background: $vuetify.theme.themes[theme].background}">
- 
-    <v-app-bar
-      app
-      flat
-    >
-      <v-container fluid class="py-0 fill-height">
-        <v-avatar
-
-          class="mr-10"
-          color="grey darken-1"
-          size="32"
-        >
-          <img
-            :src="cosmosConfig[0].coinLookup.icon"
-            alt="cerberus"
-          >
-        </v-avatar>
-
-        <v-btn
-          v-for="link in links"
-          :key="link.link"
-          text
-          :to="link.link"
-        >
-          {{ link.name }}
-        </v-btn>
-        <v-spacer></v-spacer>        
-          <v-progress-circular
-            v-if="logged"
-            :rotate="360"
-            :size="20"
-            :width="5"
-            :value="timerValue"
-            color="amber"
-            class="mr-4"
-          >
-      
-          </v-progress-circular>        
-          <v-btn v-if="!logged" elevation="4" depressed v-on:click="connectKeplr">
-          <img
-            class="mr-2"
-            src="/keplr.png"
-            width="20"
-            height="20"
-          >
-            Connect keplr
-          </v-btn>
-        <div v-else>
-          {{ accounts[0].address }}
-          <v-btn
-            v-if="logged"
-            class="ma-2"
-            :loading="loadingRefresh"
-            :disabled="loadingRefresh"
-            @click="refresh"
-          >
-            <v-icon class="mr-2">mdi-refresh</v-icon> Refresh
-          </v-btn>
-          <v-btn
-            v-if="logged"
-            class="ma-2"
-            @click="logoutNow"
-          >
-            <v-icon>mdi-logout</v-icon>
-          </v-btn>
-        </div>
-      <v-toolbar-items>
-        <ThemeChangerMenu />
-      </v-toolbar-items>
-      </v-container>
-    </v-app-bar>
 
     <v-main>
+    <v-parallax height="300" src="https://www.mintscan.io/_next/static/media/bg_cerberus.7ff0969f27e0fe96d9517da3f9c1c03f.png">
+    <v-row
+      align="center"
+      justify="center"
+    >
+      <v-col
+        class="text-center"
+        cols="12"
+      >
+        <h1 class="text-h4 font-weight-thin mb-4">
+          Cerberus Webwallet
+        </h1>
+ 
+      </v-col>
+    </v-row>    
+    </v-parallax>
+    <br />
       <v-container>
-
         <v-row>
           <v-col
             cols="12"
@@ -84,6 +28,7 @@
               class="pa-2"
               outlined
               rounded="lg"
+              height="100%"
             >
             <v-card-title>My wallet 
                 <SendModal 
@@ -95,23 +40,52 @@
             <v-spacer></v-spacer>
 
             <div v-if="logged">              
-              {{ (balances / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}    
+              {{ formatNum((balances / 1000000).toFixed(2)) }} {{ cosmosConfig[0].coinLookup.viewDenom }}    
               
             </div>
             <div v-else>0 {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             </v-card-title>
             <v-card-text v-if="logged">              
-              <div class="text-right"> 
-                <a href="https://www.coingecko.com/en/coins/cerberus" target="_blank">
-                  <v-img
-                    max-height="15"
-                    max-width="15"
-                    src="https://static.coingecko.com/s/thumbnail-007177f3eca19695592f0b8b0eabbdae282b54154e1be912285c9034ea6cbaf2.png"
-                  ></v-img>     
-                </a>
-                <b>Wallet value: ${{ ((balances / 1000000) * price).toFixed(2) }} </b>
-              </div> 
+ 
+              
+              <v-simple-table>
+                <template v-slot:default>
+                  <tbody>
+                    <tr>
+                      <td>Available</td>
+                      <td>{{ formatNum((balances / 1000000).toFixed(2)) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                    </tr>
+                    <tr>
+                      <td>Delegated</td>
+                      <td>{{ formatNum(getTotalDlegated.toFixed(2)) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                    </tr>
+                    <tr>
+                      <td>Total</td>
+                      <td>{{ formatNum(getTotalWallet.toFixed(2)) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                    </tr>  
+                    <tr>
+                      <td>Final amount</td>
+                      <td>${{ (getTotalWallet * price).toFixed(2) }}
+                      <img width="15" height="15" src="https://static.coingecko.com/s/thumbnail-007177f3eca19695592f0b8b0eabbdae282b54154e1be912285c9034ea6cbaf2.png"> (1 crbrus = ${{ (price).toFixed(5) }})
+                  
+                      </td>
+                    </tr>         
+                    
+                  </tbody>
+                </template>
+              </v-simple-table>  
             </v-card-text>
+            <v-card-text v-else class="text-center">              
+              <v-btn v-if="!logged" elevation="4" depressed v-on:click="connectKeplr">
+              <img
+                class="mr-2"
+                src="/keplr.png"
+                width="20"
+                height="20"
+              >
+                Connect keplr
+              </v-btn>
+            </v-card-text>            
             </v-card>
           </v-col>
           <v-col
@@ -122,26 +96,54 @@
               class="pa-2"
               outlined
               rounded="lg"
+              height="100%"
             >
             <v-card-title>My reward
             <v-spacer></v-spacer>
  
-            <div v-if="logged && priceLoaded && delegationsLoaded && delegations.length > 0 && !isNaN(rewards.amount)">{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
+            <div v-if="logged && priceLoaded && delegationsLoaded && delegations.length > 0 && !isNaN(rewards.amount)">
+              {{ formatNum((rewards.amount / 1000000).toFixed(2)) }} {{ cosmosConfig[0].coinLookup.viewDenom }} (${{ ((rewards.amount / 1000000) * price).toFixed(2) }})
+            </div>
             <div v-else>0 {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
             </v-card-title>
             <v-card-text v-if="logged && priceLoaded && delegationsLoaded">              
-              <div class="text-right"> 
-                <a href="https://www.coingecko.com/en/coins/cerberus" target="_blank">
-                  <v-img
-                    max-height="15"
-                    max-width="15"
-                    src="https://static.coingecko.com/s/thumbnail-007177f3eca19695592f0b8b0eabbdae282b54154e1be912285c9034ea6cbaf2.png"
-                  ></v-img>     
-                </a>
-                <b>Rewards value: ${{ ((rewards.amount / 1000000) * price).toFixed(2) }} </b>
-              </div> 
+             
+              <v-simple-table>
+                <template v-slot:default>
+                  <tbody>
+                    <tr>
+                      <td>Apr pool 662</td>
+                      <td>{{ aprPool662 }} %</td>
+                    </tr>
+                    <tr>
+                      <td>Apr pool 658</td>
+                      <td>Soon</td>
+                    </tr>
+                    <tr>
+                      <td>Apr pool 671</td>
+                      <td>Soon</td>
+                    </tr>  
+                    <tr>
+                      <td>Apr pool 667</td>
+                      <td>Soon</td>
+                    </tr>         
+                    
+                  </tbody>
+                </template>
+              </v-simple-table>
+              
             </v-card-text>
-
+            <v-card-text v-else class="text-center">              
+              <v-btn v-if="!logged" elevation="4" depressed v-on:click="connectKeplr">
+              <img
+                class="mr-2"
+                src="/keplr.png"
+                width="20"
+                height="20"
+              >
+                Connect keplr
+              </v-btn>
+            </v-card-text> 
             </v-card>
           </v-col>
           <v-col
@@ -152,12 +154,16 @@
               class="pa-2"
               outlined
               rounded="lg"
+              height="100%"
             >
-            <v-card-title>Chain info
-            <v-spacer></v-spacer>Height: {{ lastBlock }}
+            <v-card-title>Cerberus Price
+            <v-spacer></v-spacer>${{ (price).toFixed(7) }}
             </v-card-title>
 
-
+              
+              <ChartData 
+                :chartColor="chartColor"
+              />              
             </v-card>
           </v-col>
         </v-row>
@@ -171,6 +177,7 @@
               class="pa-2"
               outlined
               rounded="lg"
+              height="100%"
             >
             <v-card-title>My delegations 
             <v-spacer></v-spacer>         
@@ -225,7 +232,7 @@
                       </v-avatar>
                       {{ item.validatorName }}
                       </td>
-                      <td>{{ (item.share / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>{{ formatNum((item.share / 1000000).toFixed(2)) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                       <td>
 
                         <div v-if="!isNaN(item.reward)">
@@ -236,7 +243,7 @@
                         >
                           <v-icon>mdi-download</v-icon>
                         </v-btn>
-                        {{ (item.reward / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }} </div>
+                        {{ formatNum((item.reward / 1000000).toFixed(2)) }} {{ cosmosConfig[0].coinLookup.viewDenom }} </div>
                         <div v-else>0 {{ cosmosConfig[0].coinLookup.viewDenom }}</div>
                         </td>
                       <td>
@@ -272,6 +279,7 @@
               class="pa-2"
               outlined
               rounded="lg"
+              height="100%"
             >          
             <v-card-title>Other</v-card-title>
             <v-card-text>
@@ -330,7 +338,7 @@
                               {{ item.validator_src_address }} <v-icon>mdi-ray-start-arrow</v-icon> {{ item.validator_dst_address }}
                               </td>
                               <td>
-                                {{ item.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}                                
+                                {{ formatNum(item.amount) }} {{ cosmosConfig[0].coinLookup.viewDenom }}                                
                               </td>
                               <td>
                                 {{ item.completion_time }}                                
@@ -385,7 +393,7 @@
                               {{ item.validator_src_address }}
                               </td>
                               <td>
-                                {{ item.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}                                
+                                {{ formatNum(item.amount) }} {{ cosmosConfig[0].coinLookup.viewDenom }}                                
                               </td>
                               <td>
                                 {{ item.completion_time }}                                
@@ -419,101 +427,15 @@
             </v-card>
           </v-col> 
         </v-row> -->       
-        <v-row>
-          <v-col
-            cols="12"
-            md="12"
-          >
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">
-                      Rank
-                    </th>
-                    <th class="text-left">
-                      Name
-                    </th>
-                    <th class="text-left">
-                      Voting power
-                    </th>
-                    <th class="text-left">
-                      Commission
-                    </th>
-                    <th class="text-left">
-                      Operator address
-                    </th>
-                    <th class="text-left">
-                      Delegate
-                    </th>
-                  </tr>
-                </thead>
-                <tbody> 
-                  <tr
-                    v-for="(item, index) in validators"
-                    :key="item.op_address"
-                  >
-                    <td>                    
-                      <v-chip
-                        class="ma-2"
-                      >
-                        {{ (index + 1) }}
-                      </v-chip>
-                    </td>
-                    <td>
-                      <v-avatar
-
-                        class="mr-3"
-                        color="grey darken-1"
-                        size="32"
-                      >
-                        <img
-                          :src="item.avatar"
-                          alt="cerberus"
-                        >
-                      </v-avatar>              
-                    {{ item.name }}                    
-                    </td>
-                    <td>{{ (item.tokens / 1000000).toFixed(2) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
-                    <td>{{ item.crate }}</td>
-                    <td>{{ item.op_address }}</td>
-                    <td><DelegateModal
-                      v-if="logged && balancesLoaded"
-                      :chainIdProps="cosmosConfig[0].coinLookup.addressPrefix"
-                      :addressTo="item.op_address"
-                      :validatorName="item.name"
-                      :balances="balances"
-                      :coinIcon="cosmosConfig[0].coinLookup.icon"
-                    /></td>                   
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table> 
-          </v-col>
-        </v-row>
+ 
       </v-container>
     </v-main>
-  <v-footer
-    padless
-  >
-    <v-row
-      justify="center"
-      no-gutters
-    >
 
-      <v-col
-        class="py-4 text-center"
-        cols="12"
-      > 
-        cerberus.zone - {{ new Date().getFullYear() }} - v1.1.4     
-      </v-col>
-    </v-row>
-  </v-footer>
-  </v-app>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import axios from 'axios'
 import cosmosConfig from '~/cosmos.config'
 import {
 	assertIsDeliverTxSuccess,
@@ -521,32 +443,41 @@ import {
 } from '@cosmjs/stargate'
 
   export default {
-    data: () => ({
+    data: () => ({  
+      aprPool662: '',
       tab: null,   
-      links: [
-        {
-          name: 'Dashboard',
-          link: '/'
-        }/*,
-        {
-          name: 'Proposals',
-          link: '/proposals'
-        }*/
-      ],
       cosmosConfig: cosmosConfig,
       loadingRefresh: false,
       interval: {},
       timerValue: 0,
+      totalDelegated: 0
     }),
     computed: {
       ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-      ...mapState('data', [`balances`, 'validators', 'delegations', 'delegationsLoaded', 'validatorsLoaded', 'rewards', 'reDelegations', 'unbondings', 'lastBlock', 'balancesLoaded','priceLoaded', 'price']),
-      theme(){
-        return (this.$vuetify.theme.dark) ? 'dark' : 'light'
-      }      
+      ...mapState('data', [`balances`, 'validators', 'delegations', 'delegationsLoaded', 'validatorsLoaded', 'rewards', 'rewardsLoaded', 'reDelegations', 'unbondings', 'lastBlock', 'balancesLoaded','priceLoaded', 'price', 'chartColor']),     
+      getTotalDlegated(){
+        let totalDel = 0
+        this.delegations.forEach(function(item){
+          //console.log(item)
+          totalDel += Number(item.share / 1000000);
+        });
+        this.totalDelegated = totalDel
+        return totalDel
+      },
+      getTotalWallet(){
+        return (this.totalDelegated + (this.balances/1000000))
+      },   
+      
     },
+    async fetch() {
+      const getAprPool662 = await axios('https://api-osmosis.imperator.co/apr/v2/662')  
+      this.aprPool662 = getAprPool662.data[0].apr_list[0].apr_14d.toFixed(2)       
+    },    
     async mounted() {
-      this.interval = setInterval(async () => {
+      // this.$vuetify.theme.themes[(this.$vuetify.theme.dark) ? 'dark' : 'light'].background
+      //console.log(this.chartColor)
+      // this.candleOptions.chartArea.backgroundColor.fill = this.chartColor
+      /*this.interval = setInterval(async () => {
         if (this.timerValue === 100) {
           await this.$store.dispatch('data/getLastBlock')
           // console.log(this.logged)
@@ -556,9 +487,15 @@ import {
         }
         this.timerValue += 10
       }, 1000)
+
+      setInterval(async () => {
+        this.value.shift()
+        this.value.push(this.rewards.amount / 1000000)  
+ 
+      }, 5000)   */   
       
       await this.$store.dispatch('data/getLastBlock')      
-      await this.$store.dispatch('data/getAllValidators')
+      
       
       window.addEventListener("keplr_keystorechange", async () => {
         await this.$store.dispatch('keplr/connectWallet', cosmosConfig[0])
@@ -578,19 +515,13 @@ import {
         await this.$store.dispatch('data/getUnbondings', this.accounts[0].address)
         await this.$store.dispatch('data/getLastBlock')
         await this.$store.dispatch('data/getPrice')
+        
+        
         //await this.$store.dispatch('data/refresh', this.accounts[0].address)
 
         // this.address = this.accounts
         // this.$router.push({path: "/"})
-      },
- 
-      async refresh() {
-        this.loadingRefresh = true
-        await this.$store.dispatch('data/refresh', this.accounts[0].address)
-        // await this.$store.dispatch('test/refresh')
-        this.loadingRefresh = false
-        // console.log(this.accounts)
-      },
+      },    
       getReward(addrValidator) {
         (async () => {
             const chainId = cosmosConfig[0].chainId;
@@ -620,14 +551,9 @@ import {
             }
         })();
       },
-      logoutNow() {
-
-        this.$store.dispatch('keplr/logout')
-        this.$store.dispatch('data/resetSessionData')
-        
-
-        // this.$router.push({path: "login"})
-      },
+      formatNum(nombre){
+        return new Intl.NumberFormat().format(nombre)
+      },        
     },
   }
 </script>

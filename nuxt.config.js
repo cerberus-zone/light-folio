@@ -24,14 +24,33 @@ export default {
 
   css: [],
 
-  plugins: [],
+  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+  plugins: ['~/plugins/v-chart.js'],
+
 
   components: true,
 
   buildModules: ["@nuxtjs/vuetify"],
 
-  modules: ["@nuxtjs/axios"],
-
+  // Modules: https://go.nuxtjs.dev/config-modules
+  modules: [
+    // https://go.nuxtjs.dev/axios
+    "@nuxtjs/axios",
+    // https://github.com/dansmaculotte/nuxt-security
+    [
+      '@dansmaculotte/nuxt-security',
+      {
+        dev: true,
+        additionalHeaders: true,
+        referrer: 'same-origin',
+        hsts: {
+          maxAge: 15552000,
+          includeSubDomains: true,
+          preload: true,
+        },
+      },
+    ],    
+  ],
   axios: {
     baseURL: "/",
   },
