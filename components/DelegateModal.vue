@@ -47,7 +47,7 @@
                   Max
                   </v-chip>
                 </v-col>
-
+{{ amountFinal }}
                 <v-text-field
                   v-model="amountFinal"
                   label="Amount to delegate*"
@@ -150,8 +150,8 @@ import {
         v => v.startsWith(instance.chainIdProps.toLowerCase() + 'valoper') || 'Address must start with "' + instance.chainIdProps.toLowerCase() + 'valoper"',
         v => bech32Validation(v) || 'Bad address (not bech32)',
       ],
-      amount: (instance.balances / 1000000),
-      amountFinal: (instance.balances / 1000000),
+      amount: ((instance.balances / 1000000) - 1),
+      amountFinal: ((instance.balances / 1000000) - 1),
       amountRules: [
         v => !!v || 'Amount is required',
         v => !isNaN(v) || 'Amount must be number',

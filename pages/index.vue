@@ -115,7 +115,7 @@
                       <td>Apr pool 662</td>
                       <td>{{ aprPool662 }} %</td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                       <td>Apr pool 658</td>
                       <td>Soon</td>
                     </tr>
@@ -126,7 +126,7 @@
                     <tr>
                       <td>Apr pool 667</td>
                       <td>Soon</td>
-                    </tr>         
+                    </tr>-->       
                     
                   </tbody>
                 </template>
